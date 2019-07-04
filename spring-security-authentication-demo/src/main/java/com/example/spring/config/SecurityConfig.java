@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -29,15 +28,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/u/login?authorization_error=true")
+                .accessDeniedPage("/u/login?error=authorization_error")
                 .and()
                 .sessionManagement()
+//                .sessionFixation().newSession()
                 .invalidSessionUrl("/u/login?error=invalid_session")
+
                 /**
                  * 控制客户端数量
                  */
 //                .maximumSessions(1)
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) //默认是IF_REQUIRED模式
 //                .enableSessionUrlRewriting(true)
                 .and()
                 .csrf()
@@ -49,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
-                .failureUrl("/u/login?authentication_error=true")
+                .failureUrl("/u/login?error=authentication_error")
                 .loginPage("/u/login");
     }
 
