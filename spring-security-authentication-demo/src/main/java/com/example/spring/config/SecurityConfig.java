@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -13,6 +14,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 /**
  * @author twg
  * @since 2019/7/2
+ * 身份认证服务
  */
 @Configuration
 @EnableWebSecurity
@@ -23,10 +25,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/u/login").permitAll()
-                .anyRequest().hasRole("USER")
+                .anyRequest().hasRole("USER") //url 访问是否拥有user角色
+                .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/u/login?authorization_error=true")
+                .and()
+                .sessionManagement()
+                .invalidSessionUrl("/u/login?error=invalid_session")
+                /**
+                 * 控制客户端数量
+                 */
+//                .maximumSessions(1)
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .enableSessionUrlRewriting(true)
                 .and()
                 .csrf()
                 .disable()
