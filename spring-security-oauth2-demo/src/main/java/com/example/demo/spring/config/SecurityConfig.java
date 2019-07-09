@@ -1,4 +1,4 @@
-package com.example.spring.config;
+package com.example.demo.spring.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -25,16 +26,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/u/login").permitAll()
+                .antMatchers("/", "/u/login","/oauth/authorize").permitAll()
                 .anyRequest().hasRole("USER") //url 访问是否拥有user角色
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/u/login?error=authorization_error")
+                .accessDeniedPage("/u/login?error=access_denied")
                 .and()
-                .sessionManagement()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                .sessionFixation().newSession()
-                .invalidSessionUrl("/u/login?error=invalid_session")
+//                .invalidSessionUrl("/u/login?error=invalid_session")
 
                 /**
                  * 控制客户端数量

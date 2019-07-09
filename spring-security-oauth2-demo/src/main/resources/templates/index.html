@@ -1,0 +1,76 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Spring Security Demos</title>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+<div id="app">
+	<el-container>
+		<el-header>
+			<el-row :gutter="20">
+				<el-col :span="20"><div class="grid-content bg-purple"></div></el-col>
+				<el-col :span="4"><div class="grid-content bg-purple"><el-button type="primary" @click="login()">登录<i class="el-icon-upload el-icon--right"></i></el-button></div></el-col>
+			</el-row>
+		</el-header>
+		<el-main>
+			<h1>Spring Security Demos</h1>
+
+			<p>Spring Security 身份认证</p>
+
+			<div class="footer">
+				Sample application for <a
+					href="https://github.com/spring-projects/spring-security-oauth"
+					target="_blank">Spring Security OAuth</a>
+			</div>
+		</el-main>
+	</el-container>
+
+
+</div>
+</body>
+<style>
+	.el-row {
+		margin-bottom: 20px;
+	&:last-child {
+		 margin-bottom: 0;
+	 }
+	}
+	.el-col {
+		border-radius: 4px;
+	}
+	.bg-purple-dark {
+		background: #99a9bf;
+	}
+	.bg-purple-light {
+		background: #e5e9f2;
+	}
+	.grid-content {
+		border-radius: 4px;
+		min-height: 36px;
+	}
+
+</style>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    var login = new Vue({
+        el: '#app',
+        data: {
+        },
+        methods: {
+            login(){
+                window.location.href = '/u/login'
+			}
+        }
+    });
+</script>
+</html>

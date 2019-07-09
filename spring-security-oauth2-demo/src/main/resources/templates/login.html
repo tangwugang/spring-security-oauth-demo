@@ -1,0 +1,140 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录 | Spring Security Demos</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+<div id="app">
+    <el-container>
+        <el-header></el-header>
+        <el-container>
+            <el-aside></el-aside>
+            <el-container>
+                <el-main>
+                    <el-tabs :tab-position="tabPosition" v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="用户管理" name="first">
+                            <el-row v-if="isShow">
+                                <el-col :span="8">
+                                    <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2"
+                                             label-width="100px"
+                                             class="demo-ruleForm">
+                                        <el-form-item label="用户名" prop="username">
+                                            <el-input v-model="ruleForm2.username" name="username"
+                                                      auto-complete="off"></el-input>
+                                        </el-form-item>
+                                        <el-form-item label="密码" prop="pass">
+                                            <el-input type="password" v-model="ruleForm2.pass" name="password"
+                                                      auto-complete="off"></el-input>
+                                        </el-form-item>
+                                        <el-form-item>
+                                            <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+                                            <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                                        </el-form-item>
+                                    </el-form>
+                                </el-col>
+                            </el-row>
+                            <el-row v-else>
+                                <el-col :span="8">
+                                    <el-form label-width="100px">
+                                        <el-form-item label="Token">
+                                            <el-input v-model="token" :disabled="true"></el-input>
+                                        </el-form-item>
+                                    </el-form>
+                                </el-col>
+                            </el-row>
+                        </el-tab-pane>
+                        <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+                        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+                        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+                    </el-tabs>
+                </el-main>
+                <el-footer></el-footer>
+            </el-container>
+        </el-container>
+    </el-container>
+</div>
+
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    var validateUsername = (rule, value, callback) => {
+        if (value === '') {
+            callback(new Error('请输入用户名'));
+        } else {
+            callback();
+        }
+    };
+    var validatePass = (rule, value, callback) => {
+        if (value === '') {
+            callback(new Error('请输入密码'));
+        } else {
+            callback();
+        }
+    };
+    var login = new Vue({
+        el: '#app',
+        data: {
+            ruleForm2: {
+                username: 'security',
+                pass: 'security',
+            },
+            rules2: {
+                username: [
+                    {validator: validateUsername, trigger: 'blur'}
+                ],
+                pass: [
+                    {validator: validatePass, trigger: 'blur'}
+                ]
+            },
+            activeName: 'first',
+            tabPosition: 'left',
+            token: '',
+            isShow: true
+        },
+        methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let data = {
+                            username: this.ruleForm2.username,
+                            password: this.ruleForm2.pass
+                        };
+                        const options = {
+                            method: 'POST',
+                            headers: {'content-type': 'application/x-www-form-urlencoded'},
+                            params: data,
+                            url: '/login'
+                        };
+                        axios(options)
+                            .then((response) => {
+                                if (response.status == 200) {
+                                    window.location.href = '/home';
+                                }
+                            });
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            handleClick(e){
+                console.log(this.activeName);
+            }
+        }
+    })
+</script>
+
+</html>
