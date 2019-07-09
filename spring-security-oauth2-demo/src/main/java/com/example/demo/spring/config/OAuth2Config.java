@@ -22,6 +22,10 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author twg
@@ -93,6 +97,15 @@ public class OAuth2Config {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
+//                    .prefix("login")
+                    .pathMapping("/oauth/token","/oauth/access_token")
+                    .addInterceptor(new HandlerInterceptor() {
+                        @Override
+                        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                            System.out.println("AuthorizationServerConfig.preHandle ======= " + request.getServletPath());
+                            return true;
+                        }
+                    })
                     .accessTokenConverter(accessTokenConverter)
                     /**
                      * password 模式时需要
@@ -108,11 +121,11 @@ public class OAuth2Config {
         public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
             security
                     .accessDeniedHandler(accessDeniedHandler)
-                    .authenticationEntryPoint((request, response, authException) -> {
-                        System.out.println("==========authException =====" + authException);
-                        response.sendRedirect("/u/login?return_to=" + request.getServletPath());
-                    })
-                    .realm("oauth/demo")
+//                    .authenticationEntryPoint((request, response, authException) -> {
+//                        System.out.println("==========authException =====" + authException);
+//                        response.sendRedirect("/u/login?return_to=" + request.getServletPath());
+//                    })
+//                    .realm("oauth/demo")
                     .passwordEncoder(passwordEncoder())
                     .allowFormAuthenticationForClients();
 
@@ -125,5 +138,13 @@ public class OAuth2Config {
             defaultTokenServices.setClientDetailsService(clientDetailsService);
             return defaultTokenServices;
         }
+
+        /*@Bean
+        public ClientDetailsUserDetailsService clientDetailsUserDetailsService(){
+            return new ClientDetailsUserDetailsService(clientDetailsService);
+        }*/
     }
+
+
+
 }

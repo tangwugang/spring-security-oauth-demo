@@ -11,7 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.web.filter.CompositeFilter;
+
+import java.util.Arrays;
 
 /**
  * @author twg
@@ -26,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/u/login","/oauth/authorize").permitAll()
+                .antMatchers("/", "/u/login", "/oauth/authorize").permitAll()
                 .anyRequest().hasRole("USER") //url 访问是否拥有user角色
                 .anyRequest().authenticated()
                 .and()
@@ -44,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) //默认是IF_REQUIRED模式
 //                .enableSessionUrlRewriting(true)
                 .and()
+//                .addFilterBefore(compositeFilter(), AnonymousAuthenticationFilter.class)
                 .csrf()
                 .disable()
                 .logout()
@@ -69,9 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     @Bean("authenticationManager")
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
+
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -81,5 +88,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         manager.createUser(users.username("security").password("security").roles("USER").build());
         manager.createUser(users.username("admin").password("admin").roles("USER", "ADMIN").build());
         return manager;
+    }
+
+    public CompositeFilter compositeFilter() throws Exception {
+        CompositeFilter compositeFilter = new CompositeFilter();
+        AbstractAuthenticationProcessingFilter credentialsTokenEndpointFilter = new ClientCredentialsTokenEndpointFilter("/login/oauth/access_token");
+        credentialsTokenEndpointFilter.setAuthenticationManager(authenticationManagerBean());
+        compositeFilter.setFilters(Arrays.asList(credentialsTokenEndpointFilter));
+        return compositeFilter;
+
     }
 }
