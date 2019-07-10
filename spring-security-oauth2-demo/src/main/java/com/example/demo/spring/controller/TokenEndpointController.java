@@ -20,10 +20,16 @@ import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpoint;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestValidator;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriUtils;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.Map;
@@ -50,6 +56,17 @@ public class TokenEndpointController extends AbstractEndpoint {
         oAuth2RequestFactory = new DefaultOAuth2RequestFactory(clientDetailsService);
         super.setTokenGranter(endpointsConfiguration.getEndpointsConfigurer().getTokenGranter());
         super.setClientDetailsService(endpointsConfiguration.getEndpointsConfigurer().getClientDetailsService());
+    }
+
+    @GetMapping("/login/oauth/authorize")
+    public ModelAndView oauthAuthorize(@RequestParam Map<String, String> parameters, HttpServletRequest request, Map<String, Object> model) throws IOException {
+        String client_id = request.getParameter(OAuth2Utils.CLIENT_ID);
+        if (StringUtils.isEmpty(client_id)) {
+            return new ModelAndView("forward:/u/login?return_to=" + UriUtils.encode(request.getServletPath(), Charset.defaultCharset()));
+        }
+        AuthorizationRequest authorizationRequest = getOAuth2RequestFactory().createAuthorizationRequest(parameters);
+        model.put("authorizationRequest", authorizationRequest);
+        return new ModelAndView("forward:/oauth/confirm_access", model);
     }
 
 

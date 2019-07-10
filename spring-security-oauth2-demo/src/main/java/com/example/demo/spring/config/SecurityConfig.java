@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/u/login", "/oauth/authorize").permitAll()
+                .antMatchers("/","/favicon.ico", "/u/login", "/login/**","/oauth/**").permitAll()
                 .anyRequest().hasRole("USER") //url 访问是否拥有user角色
                 .anyRequest().authenticated()
                 .and()

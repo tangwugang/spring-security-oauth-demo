@@ -3,6 +3,7 @@ package com.example.demo.spring.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
@@ -22,10 +23,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author twg
@@ -97,16 +94,9 @@ public class OAuth2Config {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
-//                    .prefix("login")
-                    .pathMapping("/oauth/token","/oauth/access_token")
-                    .addInterceptor(new HandlerInterceptor() {
-                        @Override
-                        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-                            System.out.println("AuthorizationServerConfig.preHandle ======= " + request.getServletPath());
-                            return true;
-                        }
-                    })
+                    .pathMapping("/oauth/token", "/oauth/access_token")
                     .accessTokenConverter(accessTokenConverter)
+                    .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                     /**
                      * password 模式时需要
                      */
@@ -144,7 +134,6 @@ public class OAuth2Config {
             return new ClientDetailsUserDetailsService(clientDetailsService);
         }*/
     }
-
 
 
 }

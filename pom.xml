@@ -22,6 +22,10 @@
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 	</properties>
 
+	<modules>
+		<module>sample/sparklr</module>
+	</modules>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
