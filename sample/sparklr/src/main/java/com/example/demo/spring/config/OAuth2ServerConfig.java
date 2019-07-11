@@ -23,7 +23,6 @@ import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -75,8 +74,8 @@ public class OAuth2ServerConfig {
 			http
 				// Since we want the protected resources to be accessible in the UI as well we need 
 				// session creation to be allowed (it's disabled by default in 2.0.6)
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-			.and()
+//				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//			.and()
 				.requestMatchers().antMatchers("/photos/**", "/oauth/users/**", "/oauth/clients/**","/me")
 			.and()
 				.authorizeRequests()
