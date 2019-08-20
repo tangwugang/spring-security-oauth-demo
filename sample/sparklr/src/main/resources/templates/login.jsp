@@ -48,8 +48,8 @@
 							class="form-control" type='text' name='password' value="koala" />
 					</div>
 					<button class="btn btn-primary" type="submit">Login</button>
-					<input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" />
+					<%--<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />--%>
 				</fieldset>
 			</form>
 
