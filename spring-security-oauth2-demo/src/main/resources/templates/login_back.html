@@ -8,13 +8,6 @@
 </head>
 
 <body>
-<div id="app1">
-    <form action="/login" method="post">
-        <input type="text" name="username" value="security"/>
-        <input type="password" name="password" value="security"/>
-        <button type="submit">登 录</button>
-    </form>
-</div>
 <div id="app">
     <el-container>
         <el-header></el-header>
@@ -64,6 +57,7 @@
         </el-container>
     </el-container>
 </div>
+
 </body>
 <!-- import Vue before Element -->
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -115,20 +109,18 @@
                             username: this.ruleForm2.username,
                             password: this.ruleForm2.pass
                         };
-                        let formData = new FormData();
-                        formData.append('username', this.ruleForm2.username);
-                        formData.append('password', this.ruleForm2.pass);
-                        let config = {
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            }
-                        }
-                        axios.post('/login', formData, config).then(function (res) {
-                            if (res.status === 200) {
-                                /*这里做处理*/
-                                console.log("=============")
-                            }
-                        })
+                        const options = {
+                            method: 'POST',
+                            headers: {'content-type': 'application/x-www-form-urlencoded'},
+                            params: data,
+                            url: '/login'
+                        };
+                        axios(options)
+                            .then((response) => {
+                                if (response.status == 200) {
+                                    window.location.href = '/home';
+                                }
+                            });
                     } else {
                         console.log('error submit!!');
                         return false;

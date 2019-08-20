@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录 | Spring Security Demos</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+<div class="container">
+    <h1>Sparklr</h1>
+
+
+    <div class="error">
+        <h2>Woops!</h2>
+
+        <p>
+            Access could not be granted. ()
+        </p>
+    </div>
+
+    <c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION" />
+
+    <h2>Please Confirm</h2>
+
+    <p>
+        You hereby authorize "
+        <div th:text="${client.clientId}"></div>
+        " to access your protected resources.
+    </p>
+
+    <form id="confirmationForm" name="confirmationForm" action="/oauth/authorize" method="post">
+        <input name="user_oauth_approval" value="true" type="hidden" />
+        <ul class="list-unstyled">
+            <li th:each="scope: ${scopes}">
+                <div class="form-group">
+                    <span th:text="${scope.key}"/>: <input type="radio" name="scope.read"
+                                         value="true">Approve</input>
+
+                </div>
+            </li>
+            <!--<c:forEach items="${scopes}" var="scope">
+                <c:set var="approved">
+                    <c:if test="${scope.value}"> checked</c:if>
+                </c:set>
+                <c:set var="denied">
+                    <c:if test="${!scope.value}"> checked</c:if>
+                </c:set>
+                <li>
+                    <div class="form-group">
+                        ${scope.key}: <input type="radio" name="${scope.key}"
+                                             value="true" ${approved}>Approve</input> <input type="radio"
+                                                                                             name="${scope.key}" value="false" ${denied}>Deny</input>
+                    </div>
+                </li>
+            </c:forEach>-->
+        </ul>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+
+    <div class="footer">
+        Sample application for <a
+            href="https://github.com/spring-projects/spring-security-oauth"
+            target="_blank">Spring Security OAuth</a>
+    </div>
+
+</div>
+</body>
+</html>

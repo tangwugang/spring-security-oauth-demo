@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:off
                  http
             .authorizeRequests()
-                .antMatchers("/login.jsp").permitAll()
+                .antMatchers("/","/login.jsp").permitAll()
 //                .anyRequest().hasRole("USER")
                 .and()
             .exceptionHandling()

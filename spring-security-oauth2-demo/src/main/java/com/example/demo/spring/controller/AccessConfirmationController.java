@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.approval.Approval.ApprovalSt
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
@@ -26,6 +27,7 @@ import java.util.Map;
  */
 @Slf4j
 @Controller
+@SessionAttributes("authorizationRequest")
 public class AccessConfirmationController {
 
     @Autowired

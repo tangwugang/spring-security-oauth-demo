@@ -26,7 +26,7 @@
 			Unfortunately, we don't have any services for printing your photos.
 			For that, you'll have to go to Tonr.</p>
 
-		<authz:authorize access="ROLE_USER">
+		<%--<authz:authorize ifAllGranted="ROLE_USER">--%>
 			<div class="form-horizontal">
 				<form action="<c:url value="/logout"/>" role="form" method="post">
 					<input type="hidden" name="${_csrf.parameterName}"
@@ -54,7 +54,7 @@
 									});
 				</script>
 			</p>
-		</authz:authorize>
+		<%--</authz:authorize>--%>
 
 		<div class="footer">
 			Sample application for <a
