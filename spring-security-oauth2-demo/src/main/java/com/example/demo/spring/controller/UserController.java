@@ -1,5 +1,6 @@
 package com.example.demo.spring.controller;
 
+import com.example.demo.spring.model.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ import java.security.Principal;
 public class UserController {
 
     @GetMapping("/me")
-    public String getCurrentUser(Principal principal){
-        return principal.getName();
+    public User getCurrentUser(Principal principal){
+        return new User(principal.getName());
     }
 }
