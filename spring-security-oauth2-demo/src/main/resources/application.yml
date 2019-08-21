@@ -8,4 +8,6 @@ server:
 logging:
   level:
     org.springframework.security: debug
-
+spring:
+  thymeleaf:
+    cache: false

@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.debug(true).ignoring().antMatchers("/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals");
+        web.debug(true).ignoring().antMatchers("/style/**","/layui/**","/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals");
     }
 
     @Override

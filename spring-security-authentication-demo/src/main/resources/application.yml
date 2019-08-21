@@ -2,7 +2,21 @@ server:
   error:
     whitelabel:
       enabled: false
-  port: 8081
+  port: 8082
   servlet:
     session:
-      timeout: 1
+      timeout: 30
+
+demo:
+  client:
+    clientId: tonr-with-redirect
+    clientSecret: secret
+    accessTokenUri: http://localhost:8080/sso/oauth/access_token
+    userAuthorizationUri: http://localhost:8080/sso/oauth/authorize
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: http://localhost:8080/sso/me
+
+logging:
+  level:
+    org.springframework.security: DEBUG
