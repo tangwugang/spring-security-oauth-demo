@@ -25,6 +25,9 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId("oauth").stateless(false);
+        /**
+         * 如果client端设置了资源ID，必须一一对应
+         */
+//        resources.resourceId("oauth").stateless(false);
     }
 }

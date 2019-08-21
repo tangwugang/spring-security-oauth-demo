@@ -85,7 +85,7 @@ public class OAuth2Config {
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 //            if (Objects.isNull(clientDetailsService)) {
             clients.inMemory().withClient("tonr-with-redirect")
-                    .resourceIds("oauth")
+//                    .resourceIds("oauth")
                     .authorizedGrantTypes("authorization_code", "implicit", "client_credentials")
                     .authorities("ROLE_CLIENT")
                     .scopes("read", "write")
