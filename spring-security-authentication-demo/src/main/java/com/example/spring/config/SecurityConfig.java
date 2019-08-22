@@ -23,7 +23,6 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -44,8 +43,8 @@ import java.util.List;
 @EnableAuthorizationServer
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    OAuth2ClientContext oauth2ClientContext;
+    @Autowired(required = false)
+    private OAuth2ClientContext oauth2ClientContext;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -79,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginProcessingUrl("/login")
                 .failureUrl("/u/login?error=authentication_error")
+                .successForwardUrl("/home")
                 .loginPage("/u/login").and()
                 //添加第三方登录入口
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
@@ -91,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.debug(true).ignoring().antMatchers("/style/**","/layui/**","/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals");
+        web.debug(true).ignoring().antMatchers("/style/**", "/layui/**", "/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals");
     }
 
     @Override
@@ -111,8 +111,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
-
     /**************************************************************************************************************
      ****************************第三方登录时，OAuth2ClientContextFilter 优先级必须设置最高*****************************
      **************************************************************************************************************/
@@ -126,7 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Configuration
-    @EnableResourceServer
+//    @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -152,6 +150,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 client.getClient().getClientId());
         tokenServices.setRestTemplate(oAuth2RestTemplate);
         oAuth2ClientAuthenticationFilter.setTokenServices(tokenServices);
+        /**
+         * 单点登录后跳转到首页
+         */
+        oAuth2ClientAuthenticationFilter.setAuthenticationSuccessHandler((request,response,authentication)->{
+            response.sendRedirect("/home");
+        });
         return oAuth2ClientAuthenticationFilter;
     }
 

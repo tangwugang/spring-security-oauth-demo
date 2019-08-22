@@ -90,6 +90,7 @@ public class OAuth2Config {
                     .authorities("ROLE_CLIENT")
                     .scopes("read", "write")
                     .secret("secret")
+                    .autoApprove(true)
                     .redirectUris("http://localhost:8082/login/demo");
 
             // @formatter:on
