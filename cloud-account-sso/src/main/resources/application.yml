@@ -1,0 +1,22 @@
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+  port: 8080
+
+logging:
+  level:
+    org.springframework.security: debug
+spring:
+  thymeleaf:
+    cache: false  #开发环境缓存关闭
+  redis:
+    host: 127.0.0.1
+    password: twg1234
+    prefix: oauth2
+    database: 15
+    timeout: 6000
+    port: 6379
+  session:
+    store-type: redis

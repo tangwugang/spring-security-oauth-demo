@@ -1,0 +1,34 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+  port: 8082
+  servlet:
+    session:
+      timeout: 30
+spring:
+  thymeleaf:
+    cache: false  #开发环境缓存关闭
+  redis:
+    host: 127.0.0.1
+    password: twg1234
+    prefix: account
+    database: 15
+    timeout: 6000
+    port: 6379
+  session:
+    store-type: redis
+
+demo:
+  client:
+    clientId: tonr-with-redirect
+    clientSecret: secret
+    accessTokenUri: http://localhost:8080/sso/oauth/access_token
+    userAuthorizationUri: http://localhost:8080/sso/oauth/authorize
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: http://localhost:8080/sso/me
+
+logging:
+  level:
+    org.springframework.security: DEBUG
