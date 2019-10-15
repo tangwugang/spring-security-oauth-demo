@@ -17,6 +17,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<cloud-account.version>0.0.1-SNAPSHOT</cloud-account.version>
 		<spring.security.oauth2.version>2.3.6.RELEASE</spring.security.oauth2.version>
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 	</properties>
